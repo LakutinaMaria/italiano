@@ -42,3 +42,13 @@ const hasRole = (role) => _kc.hasResourceRole(role);
 const getUserProfile = () => _kc.profile;
 const getUserInfo = () => _kc.userInfo;
 const loadUserInfo = () => _kc.loadUserInfo();
+const loadUserProfile = () => _kc.loadUserProfile();
+
+const UserService = {
+  initKeycloak,
+  doLogin,
+  doLogout,
+  isLoggedIn,
+  getToken,
+  updateToken,
+};
