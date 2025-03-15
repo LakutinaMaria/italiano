@@ -1,0 +1,8 @@
+.App {
+        position: relative; /* Ensure no interference */
+        overflow: visible; /* Avoid clipping sticky elements */
+        min-height: 100vh; 
+        min-width: 100vh;/* Full viewport height for scrolling */
+        display: flex;
+        flex-direction: column;
+}

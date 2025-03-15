@@ -1,0 +1,42 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    display: flex;
+    padding: 20px 10%;
+    background-color: rgba(128, 128, 128, 0.75);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background: transparent;
+    backdrop-filter: blur(30px);
+    color: beige;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 50px ;
+    margin-top: 2em;
+    margin-left: 25%;
+  }
+  
+  .navbar img {
+    height: 5.5rem; 
+  }
+
+  .logo {
+    font-size: 24px;
+    color: #F2E8CF;
+    font-weight: 700;
+  }
+
+  .navBar a {
+    position: relative;
+    font-size: 18px;
+    color: #F2E8CF;
+    font-weight: 500;
+    margin-left: 7%;
+  }
+
+  .navBar a::before {
+    content: "",
+    posi;
+  }
