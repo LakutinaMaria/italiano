@@ -1,5 +1,5 @@
 import Keycloak, { KeycloakTokenParsed } from "keycloak-js";
-
+import { CLIENT_ROLES } from "./keycloak/roles";
 const _kc = new Keycloak({
   realm: process.env.REACT_APP_KEYCLOAK_REALM,
   url: process.env.REACT_APP_KEYCLOAK_URL,
@@ -51,4 +51,12 @@ const UserService = {
   isLoggedIn,
   getToken,
   updateToken,
+  loadUserProfile,
+  loadUserInfo,
+  getUserProfile,
+  getUserInfo,
+  hasRole,
+  clearToken,
+  isExpired: _kc.isTokenExpired,
+  CLIENT_ROLES,
 };
