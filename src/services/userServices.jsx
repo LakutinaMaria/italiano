@@ -7,25 +7,25 @@ const _kc = new Keycloak({
 });
 
 const initKeycloak = (onAuthenticatedCallback) => {
-  if (process.env.REACT_APP_ENABLE_AUTH !== "false") {
-    _kc
-      .init({
-        onLoad: "login-required",
-        pkceMethod: "S256",
-        enableLogging: process.env.NODE_ENV === "development" ? true : false,
-      })
-      .then(() => {
+  _kc
+    .init({
+      onLoad: "login-required",
+      pkceMethod: "S256",
+    })
+    .then((authenticated) => {
+      if (authenticated) {
         onAuthenticatedCallback();
-      });
-  } else {
-    onAuthenticatedCallback();
-  }
+      } else {
+        console.log("Not authenticated");
+        doLogin();
+      }
+    });
 };
 
-const doLogin = _kc.login();
-const doLogout = _kc.logout();
-const getToken = () => _kc.getToken;
-const isLoggedIn = () => !!_kc.getToken;
+const doLogin = _kc.login;
+const doLogout = _kc.logout;
+const getToken = () => _kc.token;
+const isLoggedIn = () => !!_kc.token;
 
 async function updateToken(successCallback) {
   try {
@@ -36,6 +36,11 @@ async function updateToken(successCallback) {
     return Promise.reject();
   }
 }
+
+// const updateToken = (successCallback) =>
+//   _kc.updateToken(5)
+//     .then(successCallback)
+//     .catch(doLogin);
 
 const clearToken = () => _kc.clearToken();
 const hasRole = (role) => _kc.hasResourceRole(role);
@@ -60,3 +65,5 @@ const UserService = {
   isExpired: _kc.isTokenExpired,
   CLIENT_ROLES,
 };
+
+export default UserService;

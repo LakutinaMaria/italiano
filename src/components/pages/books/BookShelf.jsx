@@ -2,6 +2,7 @@ import React from "react";
 import Book from "./Book";
 import "./BookShelf.css";
 import { useState, useEffect } from "react";
+import HTTPService from "../../../services/httpService";
 
 const BookShelf = ({ onBookSelect }) => {
   const [books, setBooks] = useState([]);
@@ -19,19 +20,16 @@ const BookShelf = ({ onBookSelect }) => {
           selectedLevel,
         }).toString();
 
-        const response = await fetch(
+        const response = await HTTPService.getAxiosClient().get(
           `http://localhost:8899/api/v1/books?${query}`,
           {
-            method: "GET",
+            method: HTTPService.HttpMethods.GET,
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-
-        const data = await response.json();
-
-        setBooks(data);
+        setBooks(response.data);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
