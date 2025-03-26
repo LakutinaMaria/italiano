@@ -1,14 +1,14 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./BookReader.css";
+import UserService from "../../../services/userServices";
+
 const BookReader = ({ book }) => {
   const bookId = book.id;
   const pageSize = book.pageSize;
   const title = book.title;
-
   const [pageContent, setPageContent] = useState("");
-
-  const [userId, setUserId] = useState("aa3f16f3-b537-4d51-bf76-9ccf90e8b7f2");
+  const userId = UserService.getUserId();
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedWord, setSelectedWord] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
@@ -21,8 +21,10 @@ const BookReader = ({ book }) => {
     const fetchPage = async () => {
       setIsLoading(true);
       try {
+        const cursor = await getCursor(userId, bookId);
+        console.log(cursor);
         const response = await fetch(
-          `http://localhost:8899/api/v1/books/${bookId}/${userId}`,
+          `${process.env.REACT_APP_GATEWAY_URL}/api/v1/books/${bookId}/${cursor}`,
           { method: "GET", headers: { "Content-Type": "application/json" } }
         );
         if (!response.ok)
@@ -71,6 +73,26 @@ const BookReader = ({ book }) => {
         translations[word.toLowerCase()] || "No translation available"
       );
     }, 300);
+  };
+
+  const getCursor = async (userId, bookId) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_GATEWAY_URL}/api/v1/user-progress/${userId}/book/${bookId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch cursor: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching cursor:", error);
+      return 0;
+    }
   };
 
   const handleWordClick = (event) => {

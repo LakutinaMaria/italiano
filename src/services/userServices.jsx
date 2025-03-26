@@ -36,7 +36,12 @@ async function updateToken(successCallback) {
     return Promise.reject();
   }
 }
-
+const getUserId = () => {
+  if (_kc.tokenParsed) {
+    return _kc.tokenParsed.sub;
+  }
+  return null;
+};
 // const updateToken = (successCallback) =>
 //   _kc.updateToken(5)
 //     .then(successCallback)
@@ -63,6 +68,7 @@ const UserService = {
   hasRole,
   clearToken,
   isExpired: _kc.isTokenExpired,
+  getUserId,
   CLIENT_ROLES,
 };
 

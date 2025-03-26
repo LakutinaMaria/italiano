@@ -12,11 +12,8 @@ const _axios = axios.create();
 
 const configure = () => {
   getAxiosClient().interceptors.request.use((config) => {
-    console.log(UserService.getToken());
     if (UserService.isLoggedIn()) {
-      console.log("logged in ");
       const successCb = () => {
-        console.log(config);
         if (config.headers) {
           config.headers.Authorization = `Bearer ${UserService.getToken()}`;
         }
