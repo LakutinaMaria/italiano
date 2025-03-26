@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "./BookReader.css";
 import UserService from "../../../services/userServices";
 
-const BookReader = ({ book }) => {
+const BookReader = ({ book, onBack }) => {
   const bookId = book.id;
   const pageSize = book.pageSize;
   const title = book.title;
@@ -174,6 +174,14 @@ const BookReader = ({ book }) => {
         <h2>{title}</h2>
       </div>
       <div className="book-content">
+        <button
+          className="back-btn"
+          onClick={() => {
+            onBack();
+          }}
+        >
+          ×
+        </button>
         <div className="page">
           {!isLoading ? renderPage(pageContent) : "Loading book..."}
         </div>
