@@ -24,7 +24,7 @@ const BookReader = ({ book, onBack }) => {
         const cursor = await getCursor(userId, bookId);
         console.log(cursor);
         const response = await fetch(
-          `${process.env.REACT_APP_GATEWAY_URL}/api/v1/books/${bookId}/${cursor}`,
+          `${process.env.REACT_APP_GATEWAY_URL}/api/v1/books/${bookId}/page/${cursor}/user/${userId}`,
           { method: "GET", headers: { "Content-Type": "application/json" } }
         );
         if (!response.ok)
