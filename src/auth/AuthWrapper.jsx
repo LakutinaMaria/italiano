@@ -1,5 +1,3 @@
-import { createContext, useContext, useState } from "react";
-import { request, setAuthToken, setRefreshToken } from "../util/axios_helper";
 import { LoginForm } from "../components/pages/login/LoginForm";
 import { useNavigate } from "react-router-dom";
 import { HomePage } from "../components/pages/homePage/HomePage";
@@ -13,6 +11,7 @@ import { Words } from "../components/pages/words/Words";
 export const AuthWrapper = () => {
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
       <Route path="/dashboard" element={<HomePage />} />
       <Route path="/lessons" element={<Lessons />} />
       <Route path="/words" element={<Words />} />

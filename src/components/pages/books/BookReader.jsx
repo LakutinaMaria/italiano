@@ -2,6 +2,8 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./BookReader.css";
 import UserService from "../../../services/userServices";
+import HTTPService from "../../../services/httpService";
+import PageNavigation from "./PageNavigation";
 
 const BookReader = ({ book, onBack }) => {
   const bookId = book.id;
@@ -16,33 +18,57 @@ const BookReader = ({ book, onBack }) => {
   const [translation, setTranslation] = useState("");
   const popupRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const hasFetchedInitial = useRef(false);
+
+  const getCursor = async (userId, bookId) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_GATEWAY_URL}/api/v1/user-progress/${userId}/book/${bookId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch cursor: ${response.status}`);
+      }
+      const data = await response.json();
+      setCurrentPage(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching cursor:", error);
+      return 0;
+    }
+  };
+
+  const fetchPage = async (page) => {
+    setIsLoading(true);
+    try {
+      const cursor = page === 0 ? await getCursor(userId, bookId) : page;
+      const response = await fetch(
+        `${process.env.REACT_APP_GATEWAY_URL}/api/v1/books/${bookId}/page/${cursor}/user/${userId}`,
+        { method: "GET", headers: { "Content-Type": "application/json" } }
+      );
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      const bookContent = await response.json();
+      if (bookContent) {
+        setCurrentPage(bookContent.pageNumber);
+        setPageContent(bookContent.content);
+      }
+    } catch (error) {
+      console.error("Error fetching page:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPage = async () => {
-      setIsLoading(true);
-      try {
-        const cursor = await getCursor(userId, bookId);
-        console.log(cursor);
-        const response = await fetch(
-          `${process.env.REACT_APP_GATEWAY_URL}/api/v1/books/${bookId}/page/${cursor}/user/${userId}`,
-          { method: "GET", headers: { "Content-Type": "application/json" } }
-        );
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-        const bookContent = await response.json();
-        if (bookContent) {
-          setCurrentPage(bookContent.pageNumber);
-          setPageContent(bookContent.content);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching page:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPage();
-  }, [bookId, userId]);
+    if (!hasFetchedInitial.current) {
+      hasFetchedInitial.current = true;
+      fetchPage(currentPage);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -75,32 +101,11 @@ const BookReader = ({ book, onBack }) => {
     }, 300);
   };
 
-  const getCursor = async (userId, bookId) => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_GATEWAY_URL}/api/v1/user-progress/${userId}/book/${bookId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch cursor: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching cursor:", error);
-      return 0;
-    }
-  };
-
   const handleWordClick = (event) => {
     const word = event.target.textContent.replace(/[.,!?;:'"()]/g, "");
     setSelectedWord(word);
     getTranslation(word);
 
-    // Calculate popup position
     const rect = event.target.getBoundingClientRect();
     setPopupPosition({
       top: rect.bottom + window.scrollY,
@@ -115,36 +120,18 @@ const BookReader = ({ book, onBack }) => {
     setSelectedWord(null);
   };
 
-  const nextPage = () => {
-    if (currentPage < pageSize - 1) {
-      const fetchNextPage = async () => {
-        setIsLoading(true);
-        try {
-          const response = await fetch(
-            `http://localhost:8899/api/v1/books/${bookId}/${userId}/next`,
-            { method: "GET", headers: { "Content-Type": "application/json" } }
-          );
-          if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-          const bookContent = await response.json();
-          if (bookContent) {
-            setCurrentPage(bookContent.pageNumber);
-            setPageContent(bookContent.content);
-            setIsLoading(false);
-          }
-        } catch (error) {
-          console.error("Error fetching page:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchNextPage();
+  const handleNextPage = () => {
+    if (currentPage < pageSize) {
+      fetchPage(currentPage + 1);
+      setCurrentPage(currentPage + 1);
       setSelectedWord(null);
     }
   };
 
-  const prevPage = () => {
-    if (currentPage > 0) {
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      fetchPage(currentPage - 1);
+      setCurrentPage(currentPage - 1);
       setSelectedWord(null);
     }
   };
@@ -213,25 +200,12 @@ const BookReader = ({ book, onBack }) => {
         )}
       </div>
 
-      <div className="navigation">
-        <button
-          className="nav-btn"
-          onClick={prevPage}
-          disabled={currentPage === 0}
-        >
-          Previous Page
-        </button>
-        <span className="page-info">
-          Page {currentPage} of {pageSize}
-        </span>
-        <button
-          className="nav-btn"
-          onClick={nextPage}
-          disabled={currentPage === pageSize - 1}
-        >
-          Next Page
-        </button>
-      </div>
+      <PageNavigation
+        currentPage={currentPage}
+        totalPages={pageSize}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
+      />
     </div>
   );
 };
