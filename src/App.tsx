@@ -1,8 +1,8 @@
 import "./App.css";
-import { AuthWrapper } from "./auth/AuthWrapper";
+import { AuthWrapper } from "./auth/AuthWrapper.tsx";
 import { BrowserRouter } from "react-router-dom";
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
       <BrowserRouter>
@@ -10,6 +10,6 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

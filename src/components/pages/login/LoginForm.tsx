@@ -1,16 +1,22 @@
 import "./LoginForm.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { Background } from "../../background/Background";
+import { Background } from "../../background/Background.tsx";
 import React, { useState } from "react";
 
-export const LoginForm = ({ onLogin, onRegister }) => {
-  const [active, setActive] = useState("login");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+// Define types for the props
+interface LoginFormProps {
+  onLogin: (userName: string, password: string) => Promise<void>;
+  onRegister: (userName: string, email: string, password: string) => Promise<void>;
+}
 
-  const handleLogin = async (event) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onRegister }) => {
+  const [active, setActive] = useState<"login" | "register">("login");
+  const [userName, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       await onLogin(userName, password);
@@ -19,12 +25,12 @@ export const LoginForm = ({ onLogin, onRegister }) => {
     }
   };
 
-  const handleRegister = async (event) => {
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       await onRegister(userName, email, password);
     } catch (error) {
-      console.error("Registration  failed:", error);
+      console.error("Registration failed:", error);
     }
   };
 
@@ -61,7 +67,7 @@ export const LoginForm = ({ onLogin, onRegister }) => {
                   <input type="checkbox" />
                   Remember me
                 </label>
-                <a href="#">Forgot passoword?</a>
+                <a href="#">Forgot password?</a>
               </div>
               <button type="submit">Login</button>
               <div className="register-link">
@@ -109,7 +115,7 @@ export const LoginForm = ({ onLogin, onRegister }) => {
               <button type="submit">Register</button>
               <div className="register-link">
                 <p>
-                  Do have an account?{" "}
+                  Do you have an account?{" "}
                   <a href="#" onClick={() => setActive("login")}>
                     Login
                   </a>

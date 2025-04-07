@@ -1,7 +1,11 @@
 import React from "react";
 import "./Background.css";
 
-export const Background = ({ type }) => {
+interface BackgroundProps {
+  type: "video" | "image"; 
+}
+
+export const Background: React.FC<BackgroundProps> = ({ type }) => {
   return (
     <>
       {type === "video" && (

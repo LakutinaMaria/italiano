@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",          // Enable JSX transformation for React 17+
+    "moduleResolution": "node16", // Node16 module resolution
+    "module": "Node16",           // Set module to Node16 for compatibility
+    "target": "ESNext",           // Use modern JavaScript features
+    "strict": true,               // Enable strict type-checking
+    "esModuleInterop": true,      // Enable compatibility with non-ESM modules
+    "allowJs": true,              // Allow JavaScript files
+    "skipLibCheck": true,         // Skip type checking of declaration files
+    "resolveJsonModule": true,    // Allow importing JSON files
+    "noEmit": true,                // Disable emitting compiled files (only for type-checking)
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src"]
+}
