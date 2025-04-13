@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";import styles from "./book-reader.module.css";
 import { BookProps } from "./Book.tsx";
-import { getCursor }  from "./book-reader/apiBookReared.tsx";
+import { getCursor, wordClick }  from "./book-reader/apiBookReared.tsx";
 import UserService from "../../../services/userServices.tsx";
 import { Word } from "../words/Word.tsx";
 
@@ -13,7 +13,6 @@ type BookReaderProps = {
 };
 
 const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
-  console.log(book.id);
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [hoveredWord, setHoveredWord] = useState<string | null>(null)
   const [selectedWord, setSelectedWord] = useState<Word | null>(null)
@@ -59,9 +58,7 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
   }
 
   // Function to handle word click
-  const handleWordClick = async (word: string) => {
-    setIsLoading(true)
-
+  const handleWordClick = async (word: string) => {  
     try {
       await new Promise((resolve) => setTimeout(resolve, 500))
 
