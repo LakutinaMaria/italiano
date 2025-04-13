@@ -1,50 +1,33 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import "./BookReader.css";
-import UserService from "../../../services/userServices";
-import HTTPService from "../../../services/httpService";
-import PageNavigation from "./PageNavigation";
+"use client"
 
-const BookReader = ({ book, onBack }) => {
+import { useState, useEffect, useRef } from "react";import styles from "./book-reader.module.css";
+import { BookProps } from "./Book.tsx";
+import { getCursor }  from "./book-reader/apiBookReared.tsx";
+import UserService from "../../../services/userServices.tsx";
+import { Word } from "../words/Word.tsx";
+
+
+type BookReaderProps = {
+  book: BookProps;
+  onBack: () => void;
+};
+
+const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
+  console.log(book.id);
+  const [currentPage, setCurrentPage] = useState<number>(0)
+  const [hoveredWord, setHoveredWord] = useState<string | null>(null)
+  const [selectedWord, setSelectedWord] = useState<Word | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const bookId = book.id;
-  const pageSize = book.pageSize;
-  const title = book.title;
-  const [pageContent, setPageContent] = useState("");
   const userId = UserService.getUserId();
-  const [currentPage, setCurrentPage] = useState(0);
-  const [selectedWord, setSelectedWord] = useState(null);
-  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
-  const [dictionary, setDictionary] = useState([]);
-  const [translation, setTranslation] = useState("");
-  const popupRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [pageContent, setPageContent] = useState("");
   const hasFetchedInitial = useRef(false);
 
-  const getCursor = async (userId, bookId) => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_GATEWAY_URL}/api/v1/user-progress/${userId}/book/${bookId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch cursor: ${response.status}`);
-      }
-      const data = await response.json();
-      setCurrentPage(data);
-      return data;
-    } catch (error) {
-      console.error("Error fetching cursor:", error);
-      return 0;
-    }
-  };
-
-  const fetchPage = async (page) => {
+  const fetchPage = async (page: number) => {
     setIsLoading(true);
     try {
       const cursor = page === 0 ? await getCursor(userId, bookId) : page;
+      console.log(cursor);
       const response = await fetch(
         `${process.env.REACT_APP_GATEWAY_URL}/api/v1/books/${bookId}/page/${cursor}/user/${userId}`,
         { method: "GET", headers: { "Content-Type": "application/json" } }
@@ -55,6 +38,7 @@ const BookReader = ({ book, onBack }) => {
       if (bookContent) {
         setCurrentPage(bookContent.pageNumber);
         setPageContent(bookContent.content);
+        console.log(bookContent.content)
       }
     } catch (error) {
       console.error("Error fetching page:", error);
@@ -63,65 +47,59 @@ const BookReader = ({ book, onBack }) => {
     }
   };
 
-  useEffect(() => {
-    if (!hasFetchedInitial.current) {
-      hasFetchedInitial.current = true;
-      fetchPage(currentPage);
-    }
-  }, [currentPage]);
+   useEffect(() => {
+     if (!hasFetchedInitial.current) {
+       hasFetchedInitial.current = true;
+       fetchPage(currentPage);
+     }
+   }, [currentPage]); 
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        setSelectedWord(null);
+  const handleWordHover = (word: string) => {
+    setHoveredWord(word)
+  }
+
+  // Function to handle word click
+  const handleWordClick = async (word: string) => {
+    setIsLoading(true)
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
+      const wordData: Word = {
+        id: `word-${Date.now()}`,
+        text: word,
+        translation:
+          word === "vulnerable"
+            ? "susceptible to physical or emotional attack or harm"
+            : word === "advice"
+              ? "guidance or recommendations offered with regard to prudent future action"
+              : "Translation not available",
+        usage: [`The team's defense was vulnerable to fast attacks.`, `She felt vulnerable after sharing her secret.`],
+        isStudying: word === "advice",
+        progress: word === "advice" ? 65 : 0,
       }
-    };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const getTranslation = (word) => {
-    // TODO
-    setTimeout(() => {
-      const translations = {
-        hello: "hola",
-        world: "mundo",
-        book: "libro",
-        read: "leer",
-        page: "página",
-        dictionary: "diccionario",
-      };
-
-      setTranslation(
-        translations[word.toLowerCase()] || "No translation available"
-      );
-    }, 300);
-  };
-
-  const handleWordClick = (event) => {
-    const word = event.target.textContent.replace(/[.,!?;:'"()]/g, "");
-    setSelectedWord(word);
-    getTranslation(word);
-
-    const rect = event.target.getBoundingClientRect();
-    setPopupPosition({
-      top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX,
-    });
-  };
-
-  const addToDictionary = () => {
-    if (selectedWord && !dictionary.includes(selectedWord)) {
-      setDictionary([...dictionary, selectedWord]);
+      setSelectedWord(wordData)
+    } catch (error) {
+      console.error("Error fetching word data:", error)
+    } finally {
+      setIsLoading(false)
     }
-    setSelectedWord(null);
-  };
+  }
+
+  // Function to add word to study list
+  const handleAddToStudy = () => {
+    if (selectedWord) {
+      setSelectedWord({
+        ...selectedWord,
+        isStudying: true,
+        progress: 0,
+      })
+    }
+  }
 
   const handleNextPage = () => {
-    if (currentPage < pageSize) {
+    if (currentPage < book.pageSize) {
       fetchPage(currentPage + 1);
       setCurrentPage(currentPage + 1);
       setSelectedWord(null);
@@ -136,78 +114,96 @@ const BookReader = ({ book, onBack }) => {
     }
   };
 
-  const renderPage = (pageContent) => {
-    if (!pageContent) return null;
-    const words = pageContent.split(/(\s+)/);
-    return (
-      <div style={{ whiteSpace: "pre-wrap" }}>
-        {words.map((word, index) => {
-          if (word.trim() === "") {
-            return word;
-          }
-          return (
-            <span key={index} className="word" onClick={handleWordClick}>
-              {word}
-            </span>
-          );
-        })}
-      </div>
-    );
-  };
+  // Function to render the text with interactive words
+  const renderInteractiveText = (text: string) => {
+    const words = text.split(" ")
+
+    return words.map((word, index) => {
+      // Remove punctuation for comparison but keep it for display
+      const cleanWord = word.replace(/[.,;!?()'"]/g, "")
+      const isHovered = hoveredWord === cleanWord
+
+      return (
+        <span
+          key={index}
+          className={`${styles.word} ${isHovered ? styles.wordHovered : ""}`}
+          onMouseEnter={() => handleWordHover(cleanWord)}
+          onMouseLeave={() => setHoveredWord(null)}
+          onClick={() => handleWordClick(cleanWord)}
+        >
+          {word}{" "}
+        </span>
+      )
+    })
+  }
 
   return (
-    <div className="book-reader">
-      <div className="title">
-        <h2>{title}</h2>
-      </div>
-      <div className="book-content">
-        <button
-          className="back-btn"
-          onClick={() => {
-            onBack();
-          }}
-        >
-          ×
-        </button>
-        <div className="page">
-          {!isLoading ? renderPage(pageContent) : "Loading book..."}
+    <div className={styles.bookReader}>
+      <header className={styles.bookHeader}>
+        <h1>{book.title}</h1>
+      </header>
+
+      <main className={styles.bookContent}>
+        <div className={styles.pageContent}>{renderInteractiveText(pageContent)}</div>
+
+        <div className={styles.translationCard}>
+          {isLoading ? (
+            <div className={styles.loader}>Loading...</div>
+          ) : selectedWord ? (
+            <>
+              <h2>{selectedWord.text}</h2>
+              <p className={styles.translation}>{selectedWord.translation}</p>
+
+              {selectedWord.usage && (
+                <div className={styles.usageExamples}>
+                  <h3>Usage Examples:</h3>
+                  <ul>
+                    {selectedWord.usage.map((example, index) => (
+                      <li key={index}>{example}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedWord.isStudying ? (
+                <div className={styles.progressContainer}>
+                  <h3>Study Progress</h3>
+                  <div className={styles.progressBar}>
+                    <div className={styles.progressFill} style={{ width: `${selectedWord.progress}%` }}></div>
+                  </div>
+                  <span>{selectedWord.progress}%</span>
+                </div>
+              ) : (
+                <button className={styles.studyButton} onClick={handleAddToStudy}>
+                  Add to Study List
+                </button>
+              )}
+            </>
+          ) : (
+            <div className={styles.emptyState}>
+              <p>Hover over a word and click to see its translation</p>
+            </div>
+          )}
         </div>
+      </main>
 
-        {selectedWord && (
-          <div
-            ref={popupRef}
-            className="word-popup"
-            style={{ top: popupPosition.top, left: popupPosition.left }}
-          >
-            <div className="popup-header">
-              <h3>{selectedWord}</h3>
-              <button
-                className="close-btn"
-                onClick={() => setSelectedWord(null)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="popup-content">
-              <p className="translation">
-                {translation || "Loading translation..."}
-              </p>
-              <button className="add-btn" onClick={addToDictionary}>
-                Add to Dictionary
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <PageNavigation
-        currentPage={currentPage}
-        totalPages={pageSize}
-        onNextPage={handleNextPage}
-        onPrevPage={handlePrevPage}
-      />
+      <footer className={styles.pageNavigation}>
+        <button className={styles.navButton} onClick={() => handlePrevPage()} disabled={currentPage === 1}>
+          Previous Page
+        </button>
+        <span className={styles.pageNumber}>
+          Page {currentPage} of {book.pageSize}
+        </span>
+        <button
+          className={styles.navButton}
+          onClick={() => handleNextPage()}
+          disabled={currentPage === book.pageSize}
+        >
+          Next Page
+        </button>
+      </footer>
     </div>
-  );
-};
+  )
+}
 
 export default BookReader;

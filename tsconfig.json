@@ -12,5 +12,5 @@
     "noEmit": true,                // Disable emitting compiled files (only for type-checking)
     "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": ["src", "global.d.ts"]
 }

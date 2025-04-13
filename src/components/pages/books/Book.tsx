@@ -8,6 +8,7 @@ export interface BookProps {
   coverUrl?: string;
   level: string;
   started?: boolean;
+  pageSize: 0;
   onClick: () => void;
   style?: React.CSSProperties;
 }

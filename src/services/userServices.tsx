@@ -44,11 +44,11 @@ async function updateToken(successCallback: SuccessCallback): Promise<void> {
   }
 }
 
-const getUserId = (): string | null => {
+const getUserId = (): string  => {
   if (_kc.tokenParsed) {
-    return _kc.tokenParsed.sub || null;
+    return _kc.tokenParsed.sub || "";
   }
-  return null;
+  return "";
 };
 
 const clearToken = (): void => _kc.clearToken();
