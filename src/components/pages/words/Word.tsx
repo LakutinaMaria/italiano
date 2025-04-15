@@ -1,6 +1,7 @@
 export interface Word {
     id: string;
-    text: string;
+    content: string;
+    definition: string;
     translation?: string;
     usage?: string[];
     isStudying?: boolean;

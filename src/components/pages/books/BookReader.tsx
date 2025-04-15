@@ -64,8 +64,9 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
 
       const wordData: Word = {
         id: `word-${Date.now()}`,
-        text: word,
-        translation:
+        content: word,
+        translation: "Перевод",
+        definition:
           word === "vulnerable"
             ? "susceptible to physical or emotional attack or harm"
             : word === "advice"
@@ -148,12 +149,12 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
             <div className={styles.loader}>Loading...</div>
           ) : selectedWord ? (
             <>
-              <h2>{selectedWord.text}</h2>
-              <p className={styles.translation}>{selectedWord.translation}</p>
+              <h2>{selectedWord.content} - {selectedWord.translation}</h2>
+              <p className={styles.translation}>{selectedWord.definition}</p>
 
               {selectedWord.usage && (
                 <div className={styles.usageExamples}>
-                  <h3>Usage Examples:</h3>
+                  <h3>Примеры:</h3>
                   <ul>
                     {selectedWord.usage.map((example, index) => (
                       <li key={index}>{example}</li>
