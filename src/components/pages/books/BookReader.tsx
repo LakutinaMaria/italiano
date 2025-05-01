@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react";import styles from "./book-reader.module.css";
+import { useState, useEffect, useRef } from "react";
+import styles from "./book-reader.module.css";
 import { BookProps } from "./Book.tsx";
 import { getCursor, wordClick }  from "./book-reader/apiBookReared.tsx";
 import UserService from "../../../services/userServices.tsx";
 import { Word } from "../words/Word.tsx";
-
+import HTTPService from "../../../services/httpService.tsx";
 
 type BookReaderProps = {
   book: BookProps;
@@ -58,32 +59,35 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
   }
 
   // Function to handle word click
-  const handleWordClick = async (word: string) => {  
+  const handleWordClick = async (word: string, userId: string) => {
+    setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500))
-
+      const response = await HTTPService.getAxiosClient().get(
+        `${process.env.REACT_APP_GATEWAY_URL}/api/v1/words/${word.toLowerCase()}/${userId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
       const wordData: Word = {
-        id: `word-${Date.now()}`,
-        content: word,
-        translation: "Перевод",
-        definition:
-          word === "vulnerable"
-            ? "susceptible to physical or emotional attack or harm"
-            : word === "advice"
-              ? "guidance or recommendations offered with regard to prudent future action"
-              : "Translation not available",
-        usage: [`The team's defense was vulnerable to fast attacks.`, `She felt vulnerable after sharing her secret.`],
-        isStudying: word === "advice",
-        progress: word === "advice" ? 65 : 0,
-      }
-
-      setSelectedWord(wordData)
+        id: response.data.id,
+        content: response.data.content,
+        translation: response.data.translation,
+        definition: response.data.definition,
+        usage: response.data.usage,
+        isStudying: response.data.isStudying || false,
+        progress: response.data.progress || 0,
+      };
+  
+      setSelectedWord(wordData);
     } catch (error) {
-      console.error("Error fetching word data:", error)
+      console.error('Error fetching word data:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   // Function to add word to study list
   const handleAddToStudy = () => {
@@ -127,7 +131,7 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
           className={`${styles.word} ${isHovered ? styles.wordHovered : ""}`}
           onMouseEnter={() => handleWordHover(cleanWord)}
           onMouseLeave={() => setHoveredWord(null)}
-          onClick={() => handleWordClick(cleanWord)}
+          onClick={() => handleWordClick(cleanWord, userId)}
         >
           {word}{" "}
         </span>
