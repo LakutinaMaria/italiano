@@ -61,37 +61,43 @@ const BookShelf: React.FC<BookShelfProps> = ({ onBookSelect }) => {
     <>
       <div className="book-shelf">
         <div className="filters">
-          <input
-            type="text"
-            placeholder="Cerca libri..."
-            value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchTerm(e.target.value)
-            }
-            className="search-input"
-          />
-          <label className="started-only">
+          <div className="serce-input">
             <input
-              type="checkbox"
-              checked={showStartedOnly}
+              type="text"
+              placeholder="Cerca libri..."
+              value={searchTerm}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setShowStartedOnly(e.target.checked)
+                setSearchTerm(e.target.value)
               }
+              className="book-serce-input"
             />
-            Mostra solo i libri iniziati
-          </label>
-          <select
-            value={selectedLevel}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-              setSelectedLevel(e.target.value)
-            }
-            className="level-select"
-          >
-            <option value="All">Tutti i livelli</option>
-            <option value="Beginner">Principiante</option>
-            <option value="Intermediate">Intermedio</option>
-            <option value="Advanced">Avanzato</option>
-          </select>
+          </div>
+          <div className="checkbox">
+            <label className="started-only">
+              <input
+                type="checkbox"
+                checked={showStartedOnly}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setShowStartedOnly(e.target.checked)
+                }
+              />
+              Mostra solo i libri iniziati
+            </label>
+          </div>
+          <div className="select">
+            <select
+              value={selectedLevel}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setSelectedLevel(e.target.value)
+              }
+              className="level-select"
+            >
+              <option value="All">Tutti i livelli</option>
+              <option value="Beginner">Principiante</option>
+              <option value="Intermediate">Intermedio</option>
+              <option value="Advanced">Avanzato</option>
+            </select>
+          </div>
         </div>
         <div className="books-grid">
           {filteredBooks.map((book: BookProps) => (

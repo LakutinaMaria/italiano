@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 50px ;
+  height: 80%;
   }
   
   h1 {
@@ -27,28 +28,29 @@
   }
   
   h2 {
-    color: #444;
+    color: beige;
     border-bottom: 2px solid #eee;
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
     font-weight: 500;
   }
   
-  /* Main content layout - horizontal alignment */
   .main-content {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    height: 100%;
+    padding: 1em;
   }
   
-  /* Study section */
   .study-section {
-    background: linear-gradient(145deg, #ffffff, #f5f7fa);
+    background-color: rgba(128, 128, 128, 0.25);
     padding: 1.5rem;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.40);
     height: fit-content;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
   }
   
   .study-section:hover {
@@ -63,15 +65,15 @@
   }
   
   .study-button {
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
+    padding: 2rem 1.5rem;
+    font-size: 1.5rem;
     border: none;
     border-radius: 12px;
     background-color: #f0f0f0;
     color: #333;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.20);
     font-weight: 500;
   }
   
@@ -82,16 +84,16 @@
   }
   
   .quick-study {
-    font-size: 1.25rem;
+    font-size: 3rem;
     padding: 1.5rem 2rem;
-    background: linear-gradient(135deg, #4a6fa5, #3a5a8c);
+    background: linear-gradient(135deg, #386641, #6A994E);
     color: white;
     width: 100%;
     letter-spacing: 0.5px;
   }
   
   .quick-study:hover {
-    background: linear-gradient(135deg, #3a5a8c, #2a4a7c);
+    background: linear-gradient(135deg, #6A994E, #A7C957);
   }
   
   .secondary-buttons {
@@ -107,14 +109,15 @@
   
   /* Dictionary section */
   .dictionary-section {
-    background: linear-gradient(145deg, #ffffff, #f9f9f9);
-    padding: 2rem;
+    background-color: rgba(128, 128, 128, 0.25);
+    padding: 1.5rem;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.40);
     transition: box-shadow 0.3s ease;
   }
   
   .dictionary-section:hover {
+    transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   }
   
@@ -128,8 +131,10 @@
     padding: 0.75rem 1rem;
     font-size: 1rem;
     border: 2px solid #eaeaea;
+    border-right: none;
     border-radius: 12px 0 0 12px;
     outline: none;
+    height: 48px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   
@@ -140,9 +145,10 @@
   
   .search-button {
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #4a6fa5, #3a5a8c);
+    background: linear-gradient(135deg, #386641, #6A994E);
     color: white;
     border: none;
+    height: 48px;
     border-radius: 0 12px 12px 0;
     cursor: pointer;
     font-size: 1rem;
@@ -150,7 +156,7 @@
   }
   
   .search-button:hover {
-    background: linear-gradient(135deg, #3a5a8c, #2a4a7c);
+    background: linear-gradient(135deg, #6A994E, #A7C957);
   }
   
   /* Word result */
@@ -166,7 +172,7 @@
     transform: translateY(-3px);
   }
   
-  .word-result h3 {
+  .word-result h3{
     font-size: 1.8rem;
     margin-bottom: 1rem;
     color: #333;
@@ -176,9 +182,11 @@
   }
   
   .word-details {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    height: 100%;
+    padding: 1em;
   }
   
   .detail-section h4,
@@ -220,7 +228,7 @@
   /* Toggle study button */
   .toggle-study-button {
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #4a6fa5, #3a5a8c);
+    background: linear-gradient(135deg, #6A994E, #6A994E);
     color: white;
     border: none;
     border-radius: 12px;
@@ -233,7 +241,7 @@
   }
   
   .toggle-study-button:hover {
-    background: linear-gradient(135deg, #3a5a8c, #2a4a7c);
+    background: linear-gradient(135deg, #6A994E, #A7C957);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -255,6 +263,28 @@
   .error {
     color: #d32f2f;
     background-color: #ffebee;
+  }
+
+  .word-image {
+    width: 240px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  .audio-button {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-left: 8px;
+    align-items: center;
+    padding: 0;
+    transform: translateY(15%);
+  }
+
+  .audio-button:hover {
+    color: #007bff;
   }
   
   /* Responsive adjustments */

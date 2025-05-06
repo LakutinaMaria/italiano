@@ -74,9 +74,13 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
       const wordData: Word = {
         id: response.data.id,
         content: response.data.content,
-        translation: response.data.translation,
+        form: response.data.form,
+        alteration: response.data.alteration,
         definition: response.data.definition,
         usage: response.data.usage,
+        imgUrl: response.data.imgUrl,
+        pronunciation: response.data.pronunciation,
+        translations: response.data.translations,
         isStudying: response.data.isStudying || false,
         progress: response.data.progress || 0,
       };
@@ -153,7 +157,7 @@ const BookReader: React.FC<BookReaderProps> = ({ book, onBack }) => {
             <div className={styles.loader}>Loading...</div>
           ) : selectedWord ? (
             <>
-              <h2>{selectedWord.content} - {selectedWord.translation}</h2>
+              <h2>{selectedWord.content}</h2>
               <p className={styles.translation}>{selectedWord.definition}</p>
 
               {selectedWord.usage && (
