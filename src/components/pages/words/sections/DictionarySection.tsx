@@ -47,8 +47,7 @@ export const DictionarySection: React.FC = () => {
         if (!wordResult) return
     
         try {
-          // Replace with your actual API endpoint
-          const response = await fetch(`/api/words/${wordResult.id}/toggle-study`, {
+          const response = await fetch(`http://localhost:8899/api/v1/words/${wordResult.id}/user/${userId}`, {
             method: "POST",
           })
     
@@ -96,7 +95,7 @@ export const DictionarySection: React.FC = () => {
               <div className="word-details">
                 <div className="detail-section">
                   <p>
-                    <strong>Definition:</strong> {wordResult.definition}
+                    <strong>Definition:</strong> {wordResult.alteration}
                   </p>
                   <p>
                     <strong>Traduzione:</strong>
@@ -137,7 +136,7 @@ export const DictionarySection: React.FC = () => {
                   <span className="progress-text">{wordResult.progress}%</span>
                 </div>
                 <button onClick={toggleStudyStatus} className="toggle-study-button">
-                  {wordResult.isStudying ? "Remove from Study List" : "Add to Study List"}
+                  {wordResult.started ? "Remove from Study List" : "Add to Study List"}
                 </button>
               </div>
               </div>

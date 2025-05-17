@@ -318,4 +318,8 @@
       align-self: flex-end;
     }
   }
+
+  .word-study-container {
+    position: relative;
+  }
   

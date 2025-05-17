@@ -28,7 +28,7 @@ export const Words: React.FC = () => {
     <div className="word-study-container">
       <Background type="image" />
       <NavBar />
-      {studyMode ? (
+      {studyMode !== null ? (
         <WordStudy mode={studyMode} onBack={handleBack} />     
       ) : (
         <WordSelect onModeSelect={handleStartStudy} />

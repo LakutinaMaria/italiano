@@ -16,7 +16,7 @@ export interface Word {
     definition: string;
     usages?: Usage[];
     imgUrl?: string;
-    isStudying?: boolean;
+    started?: boolean;
     progress?: number;
     pronunciation?: string | null;
     translations: Translation[];
