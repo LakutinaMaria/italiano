@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Background } from "../../background/Background.tsx";
-import { NavBar } from "../../NavBar/NavBar.tsx";
-import { BookProps }  from "../../pages/books/Book.tsx"
+import { BookProps } from "../../pages/books/Book.tsx";
 import BookShelf from "./BookShelf.tsx";
 import BookReader from "./BookReader.tsx";
 import "./Books.css";
@@ -19,8 +17,7 @@ export const Books: React.FC = () => {
 
   return (
     <div className="bookPage">
-      <Background type="image" />
-      <NavBar />
+      {/* Background and NavBar are now handled by LayoutWrapper */}
       {selectedBook ? (
         <BookReader book={selectedBook} onBack={handleBack} />
       ) : (

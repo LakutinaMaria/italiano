@@ -1,18 +1,16 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import "./Words.css"
-import { WordSelect } from "./WordSelect.tsx"
-import { Background } from "../../background/Background.tsx"
-import { NavBar } from "../../NavBar/NavBar.tsx"
-import { WordStudy } from "./WordStudy.tsx"
+import type React from "react";
+import { useState } from "react";
+import "./Words.css";
+import { WordSelect } from "./WordSelect.tsx";
+import { WordStudy } from "./WordStudy.tsx";
 
 export const enum MODE {
   quickStudy,
   lastAddedStudy,
-  progress
-} 
+  progress,
+}
 
 export const Words: React.FC = () => {
   const [studyMode, setStudyMode] = useState<MODE | null>(null);
@@ -26,13 +24,12 @@ export const Words: React.FC = () => {
   };
   return (
     <div className="word-study-container">
-      <Background type="image" />
-      <NavBar />
+      {/* Background and NavBar are now handled by LayoutWrapper */}
       {studyMode !== null ? (
-        <WordStudy mode={studyMode} onBack={handleBack} />     
+        <WordStudy mode={studyMode} onBack={handleBack} />
       ) : (
         <WordSelect onModeSelect={handleStartStudy} />
       )}
     </div>
-  )
-}
+  );
+};
