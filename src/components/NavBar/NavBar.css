@@ -16,6 +16,7 @@
     border-radius: 50px ;
     margin-top: 2em;
     margin-left: 25%;
+    z-index: 10;
   }
   
   .navbar img {
@@ -36,7 +37,10 @@
     margin-left: 7%;
   }
 
-  .navBar a::before {
-    content: "",
-    posi;
-  }
+  .navBar a {
+  text-decoration: none;
+}
+
+.navBar a:hover {
+  color: #ffffff;
+}
