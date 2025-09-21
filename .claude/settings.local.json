@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir)",
+      "Bash(curl:*)",
+      "Read(//c/Users/fabricicco/Downloads/**)",
+      "Bash(copy:*)",
+      "Bash(bin/kc.bat import:*)",
+      "Bash(bin/kc.bat:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(dir \"C:\\Users\\fabricicco\\IdeaProjects\\front\\italiano\\keycloak-25.0.6\\themes\\strada-per-roma\\login\\resources\")",
+      "Bash(dir /s \"C:\\Users\\fabricicco\\IdeaProjects\\front\\italiano\\keycloak-25.0.6\\themes\\strada-per-roma\\login\\resources\")",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist)",
+      "Bash(taskkill:*)",
+      "Bash(git config:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

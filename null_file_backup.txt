@@ -1,0 +1,2 @@
+dir: cannot access 'keycloak-25.0.6themes': No such file or directory
+dir: cannot access '/B': No such file or directory
