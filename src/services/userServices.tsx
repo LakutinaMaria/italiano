@@ -6,9 +6,9 @@ type AuthenticatedCallback = () => void;
 type SuccessCallback = () => void;
 
 const _kc = new Keycloak({
-  realm: process.env.REACT_APP_KEYCLOAK_REALM as string,
-  url: process.env.REACT_APP_KEYCLOAK_URL as string,
-  clientId: process.env.REACT_APP_KEYCLOAK_CLIEN_ID as string,
+  realm: process.env.REACT_APP_KEYCLOAK_REALM || "strada",
+  url: process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8080",
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID || "react-app",
 });
 
 const initKeycloak = (onAuthenticatedCallback: AuthenticatedCallback): void => {
