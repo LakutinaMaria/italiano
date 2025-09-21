@@ -1,5 +1,4 @@
 import { LoginForm } from "../components/pages/login/LoginForm.tsx";
-import { useNavigate } from "react-router-dom";
 import { HomePage } from "../components/pages/homePage/HomePage.tsx";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./AuthWrapper.css";
@@ -26,58 +25,30 @@ export const AuthWrapper = () => {
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <LayoutWrapper>
-            <HomePage />
-          </LayoutWrapper>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <LayoutWrapper>
-            <HomePage />
-          </LayoutWrapper>
-        }
-      />
-      <Route
-        path="/lessons"
-        element={
-          <LayoutWrapper>
-            <Lessons />
-          </LayoutWrapper>
-        }
-      />
-      <Route
-        path="/words"
-        element={
-          <LayoutWrapper>
-            <Words />
-          </LayoutWrapper>
-        }
-      />
-      <Route
-        path="/books"
-        element={
-          <LayoutWrapper>
-            <Books />
-          </LayoutWrapper>
-        }
-      />
-      <Route
-        path="/account"
-        element={
-          <LayoutWrapper>
-            <Account />
-          </LayoutWrapper>
-        }
-      />
+      {/* Login route without layout */}
       <Route
         path="/login"
         element={
           <LoginForm onLogin={handleLogin} onRegister={handleRegister} />
+        }
+      />
+
+      {/* All other routes with persistent layout */}
+      <Route
+        path="/*"
+        element={
+          <LayoutWrapper>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/dashboard" element={<HomePage />} />
+              <Route path="/lessons" element={<Lessons />} />
+              <Route path="/words" element={<Words />} />
+              <Route path="/books" element={<Books />} />
+              <Route path="/account" element={<Account />} />
+              {/* Redirect unknown paths to dashboard */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </LayoutWrapper>
         }
       />
     </Routes>
