@@ -76,8 +76,6 @@ const BookShelf: React.FC<BookShelfProps> = ({ onBookSelect }) => {
       {/* Filters Section */}
       <Card sx={{
         mb: 4,
-        backgroundColor: 'rgba(255, 255, 255, 0.60)',
-        backdropFilter: 'blur(10px)',
         borderRadius: 4
       }}>
         <CardContent>

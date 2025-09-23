@@ -15,8 +15,6 @@ export const WordSelect: React.FC<WordStudyProps> = ({onModeSelect}) => {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'rgba(255, 255, 255, 0.60)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 4
         }}>
           <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -29,8 +27,6 @@ export const WordSelect: React.FC<WordStudyProps> = ({onModeSelect}) => {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'rgba(255, 255, 255, 0.60)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 4
         }}>
           <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>

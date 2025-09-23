@@ -27,8 +27,6 @@ const Book: React.FC<BookProps> = ({
     sx={{
       width: 250,
       cursor: 'pointer',
-      backgroundColor: 'rgba(255, 255, 255, 0.60)',
-      backdropFilter: 'blur(10px)',
       borderRadius: 4,
       transition: 'transform 0.2s, box-shadow 0.2s',
       '&:hover': {

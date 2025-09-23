@@ -103,8 +103,6 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({ userId, userCours
           flex: 2,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'rgba(255, 255, 255, 0.60)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 4
         }}>
           <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -186,8 +184,6 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({ userId, userCours
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'rgba(255, 255, 255, 0.60)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 4
         }}>
           <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -222,8 +218,6 @@ const ProgressDashboard: React.FC<ProgressDashboardProps> = ({ userId, userCours
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'rgba(255, 255, 255, 0.60)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 4
         }}>
           <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>

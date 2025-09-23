@@ -93,8 +93,7 @@ const CourseList: React.FC<CourseListProps> = ({ userId, onCourseSelected }) => 
               pb: 1,
               px: 2,
               fontFamily: 'Poppins, sans-serif',
-              backgroundColor: 'rgba(255, 255, 255, 0.60)',
-              backdropFilter: 'blur(10px)',
+              backgroundColor: 'background.paper',
               borderRadius: 3,
               textAlign: 'center'
             }}
@@ -113,8 +112,6 @@ const CourseList: React.FC<CourseListProps> = ({ userId, onCourseSelected }) => 
                   display: 'flex',
                   flexDirection: 'row',
                   transition: 'transform 0.2s, box-shadow 0.2s',
-                  backgroundColor: 'rgba(255, 255, 255, 0.60)',
-                  backdropFilter: 'blur(10px)',
                   borderRadius: 4,
                   '&:hover': {
                     transform: 'translateY(-2px)',

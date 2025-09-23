@@ -117,7 +117,7 @@ export const DictionarySection: React.FC = () => {
 
           {wordResult && (
             <Box sx={{ flex: 1, overflow: 'auto' }}>
-              <Card sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: 3 }}>
+              <Card sx={{ mb: 2, borderRadius: 3 }}>
                 <CardContent>
                   <Box display="flex" alignItems="center" gap={1} mb={2}>
                     <Typography variant="h6" sx={{ fontFamily: 'Poppins, sans-serif' }}>
