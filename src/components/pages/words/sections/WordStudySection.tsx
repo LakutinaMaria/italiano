@@ -1,5 +1,6 @@
 import React from "react";
-import "../WordSelect.css";
+import { Typography, Button, Box } from "@mui/material";
+import { School, TrendingUp, PlayCircle } from "@mui/icons-material";
 import {MODE} from "../Words.tsx";
 
 
@@ -8,16 +9,52 @@ export interface WordStudyProps {
 }
 
 const WordStudySelect: React.FC<WordStudyProps> = ({ onModeSelect }) => (
-    <>
-        <h2>Impara le parole</h2>
-        <div className="study-buttons">
-        <button className="study-button quick-study" onClick={() => onModeSelect(MODE.quickStudy)}>Impara</button>
-        <div className="secondary-buttons">
-            <button className="study-button" onClick={() => onModeSelect(MODE.lastAddedStudy)}>Impara ultimo aggiunto</button>
-            <button className="study-button" onClick={() => onModeSelect(MODE.progress)}>Progresso</button>
-        </div>
-        </div>
-    </>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Poppins, sans-serif', mb: 3 }}>
+            Impara le parole
+        </Typography>
+
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1 }}>
+            <Button
+                variant="contained"
+                size="large"
+                onClick={() => onModeSelect(MODE.quickStudy)}
+                startIcon={<School />}
+                sx={{
+                    fontFamily: 'Poppins, sans-serif',
+                    py: 2,
+                    fontSize: '1.1rem'
+                }}
+            >
+                Impara
+            </Button>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Button
+                    variant="outlined"
+                    onClick={() => onModeSelect(MODE.lastAddedStudy)}
+                    startIcon={<PlayCircle />}
+                    sx={{
+                        fontFamily: 'Poppins, sans-serif',
+                        py: 1.5
+                    }}
+                >
+                    Impara ultimo aggiunto
+                </Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => onModeSelect(MODE.progress)}
+                    startIcon={<TrendingUp />}
+                    sx={{
+                        fontFamily: 'Poppins, sans-serif',
+                        py: 1.5
+                    }}
+                >
+                    Progresso
+                </Button>
+            </Box>
+        </Box>
+    </Box>
 );
 
 export default WordStudySelect;

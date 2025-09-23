@@ -1,10 +1,21 @@
 import React from "react";
-import "../WordSelect.css";
 import { useState } from "react"
+import {
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Card,
+  CardContent,
+  LinearProgress,
+  IconButton,
+  Alert,
+  CircularProgress
+} from "@mui/material";
+import { Search, PlayArrow } from '@mui/icons-material';
 import { Word } from "../Word.tsx"
 import UserService from "../../../../services/userServices.tsx";
 import HTTPService from "../../../../services/httpService.tsx";
-import PlayArrow from '@mui/icons-material/PlayArrow';
 import { playAudio } from "../../../ui/Audio.tsx";
 
 export const DictionarySection: React.FC = () => {
@@ -63,86 +74,139 @@ export const DictionarySection: React.FC = () => {
       }
 
     return (
-        <>
-          <h2>Dizionario</h2>
-          <form onSubmit={handleSearch} className="search-form">
-            <input
-              type="text"
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Poppins, sans-serif', mb: 3 }}>
+            Dizionario
+          </Typography>
+
+          <Box component="form" onSubmit={handleSearch} sx={{ mb: 2, display: 'flex', gap: 1 }}>
+            <TextField
+              fullWidth
+              variant="outlined"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cerca la parola..."
-              className="search-input"
+              size="small"
+              sx={{
+                '& .MuiInputBase-input': {
+                  fontFamily: 'Poppins, sans-serif'
+                }
+              }}
             />
-            <button type="submit" className="search-button">
+            <Button
+              type="submit"
+              variant="contained"
+              startIcon={<Search />}
+              sx={{ fontFamily: 'Poppins, sans-serif', minWidth: 100 }}
+            >
               Cerca
-            </button>
-          </form>
-          {isLoading && <div className="loading">Loading...</div>}
-          {error && <div className="error">{error}</div>}
+            </Button>
+          </Box>
+
+          {isLoading && (
+            <Box display="flex" justifyContent="center" py={2}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2, fontFamily: 'Poppins, sans-serif' }}>
+              {error}
+            </Alert>
+          )}
 
           {wordResult && (
-            <div className="word-result">
-              <h3>{wordResult.content}
-                 {typeof wordResult.pronunciation === 'string' && wordResult.pronunciation && (
-                    <button
-                    onClick={() => playAudio(wordResult.pronunciation)}
-                    className="audio-button"
-                    title="Play pronunciation"
-                    >
-                    <PlayArrow />
-                  </button>
-                  )}</h3> 
-              <div className="word-details">
-                <div className="detail-section">
-                  <p>
+            <Box sx={{ flex: 1, overflow: 'auto' }}>
+              <Card sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: 3 }}>
+                <CardContent>
+                  <Box display="flex" alignItems="center" gap={1} mb={2}>
+                    <Typography variant="h6" sx={{ fontFamily: 'Poppins, sans-serif' }}>
+                      {wordResult.content}
+                    </Typography>
+                    {typeof wordResult.pronunciation === 'string' && wordResult.pronunciation && (
+                      <IconButton
+                        onClick={() => playAudio(wordResult.pronunciation)}
+                        size="small"
+                        color="primary"
+                      >
+                        <PlayArrow />
+                      </IconButton>
+                    )}
+                  </Box>
+
+                  <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', mb: 1 }}>
                     <strong>Definition:</strong> {wordResult.alteration}
-                  </p>
-                  <p>
+                  </Typography>
+
+                  <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', mb: 1 }}>
                     <strong>Traduzione:</strong>
-                  </p>
-                    {wordResult.translations.map((t, index) => (
-                        <p>{t.priority}. {t.text}</p>
-                    ))}
-                  
-                  <p>
+                  </Typography>
+                  {wordResult.translations.map((t, index) => (
+                    <Typography key={index} variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', ml: 1 }}>
+                      {t.priority}. {t.text}
+                    </Typography>
+                  ))}
+
+                  <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', mb: 1, mt: 2 }}>
                     <strong>Utilizzo:</strong>
-                  </p>
-                    {wordResult.usages &&( wordResult.usages.map((usage, index) => (
-                      <p>
+                  </Typography>
+                  {wordResult.usages && wordResult.usages.map((usage, index) => (
+                    <Box key={index} display="flex" alignItems="center" gap={1} sx={{ ml: 1 }}>
+                      <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif' }}>
                         {usage.text}
-                        {usage.pronunciation && (
-                          <button
+                      </Typography>
+                      {usage.pronunciation && (
+                        <IconButton
                           onClick={() => playAudio(usage.pronunciation)}
-                          className="audio-button"
-                          title="Play pronunciation"
+                          size="small"
+                          color="primary"
                         >
                           <PlayArrow />
-                        </button>     
-                        )}
-                      </p>
-                    )))}
-                </div>
-                <div className="interactive-section">
-                {wordResult.imgUrl && (
-                  <div className="image-section">
-                    <img src={wordResult.imgUrl} alt={`Example for ${wordResult.content}`} className="word-image" />
-                  </div>
-                )}
-                <div className="progress-section">
-                  <h4>Progress</h4>
-                  <div className="progress-container">
-                    <div className="progress-bar" style={{ width: `${wordResult.progress}%` }}></div>
-                  </div>
-                  <span className="progress-text">{wordResult.progress}%</span>
-                </div>
-                <button onClick={toggleStudyStatus} className="toggle-study-button">
-                  {wordResult.started ? "Remove from Study List" : "Add to Study List"}
-                </button>
-              </div>
-              </div>
-            </div>
+                        </IconButton>
+                      )}
+                    </Box>
+                  ))}
+
+                  {wordResult.imgUrl && (
+                    <Box sx={{ my: 2, textAlign: 'center' }}>
+                      <img
+                        src={wordResult.imgUrl}
+                        alt={`Example for ${wordResult.content}`}
+                        style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }}
+                      />
+                    </Box>
+                  )}
+
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', mb: 1 }}>
+                      <strong>Progress</strong>
+                    </Typography>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <LinearProgress
+                        variant="determinate"
+                        value={wordResult.progress}
+                        sx={{ flex: 1, height: 8, borderRadius: 4 }}
+                      />
+                      <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif' }}>
+                        {wordResult.progress}%
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    onClick={toggleStudyStatus}
+                    variant={wordResult.started ? "outlined" : "contained"}
+                    color={wordResult.started ? "error" : "primary"}
+                    sx={{ mt: 2, fontFamily: 'Poppins, sans-serif' }}
+                    fullWidth
+                  >
+                    {wordResult.started ? "Remove from Study List" : "Add to Study List"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </Box>
           )}
-        </>
+        </Box>
     )
 }
    

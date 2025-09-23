@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormControlLabel,
+  Checkbox,
+  Grid
+} from "@mui/material";
+import { Search } from "@mui/icons-material";
 import Book from "./Book.tsx";
-import "./BookShelf.css";
 import HTTPService from "../../../services/httpService.tsx";
 import {BookProps} from "./Book.tsx";
 
@@ -58,59 +72,86 @@ const BookShelf: React.FC<BookShelfProps> = ({ onBookSelect }) => {
   }, [books, searchTerm, showStartedOnly, selectedLevel]);
 
   return (
-    <>
-      <div className="book-shelf">
-        <div className="filters">
-          <div className="serce-input">
-            <input
-              type="text"
+    <Box sx={{ mt: 10, pt: 4 }}>
+      {/* Filters Section */}
+      <Card sx={{
+        mb: 4,
+        backgroundColor: 'rgba(255, 255, 255, 0.60)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: 4
+      }}>
+        <CardContent>
+          <Box display="flex" gap={2} flexWrap="wrap" alignItems="center">
+            <TextField
+              variant="outlined"
               placeholder="Cerca libri..."
               value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchTerm(e.target.value)
-              }
-              className="book-serce-input"
-            />
-          </div>
-          <div className="checkbox">
-            <label className="started-only">
-              <input
-                type="checkbox"
-                checked={showStartedOnly}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setShowStartedOnly(e.target.checked)
+              onChange={(e) => setSearchTerm(e.target.value)}
+              size="small"
+              sx={{
+                minWidth: 250,
+                '& .MuiInputBase-input': {
+                  fontFamily: 'Poppins, sans-serif'
                 }
-              />
-              Mostra solo i libri iniziati
-            </label>
-          </div>
-          <div className="select">
-            <select
-              value={selectedLevel}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setSelectedLevel(e.target.value)
-              }
-              className="level-select"
-            >
-              <option value="All">Tutti i livelli</option>
-              <option value="Beginner">Principiante</option>
-              <option value="Intermediate">Intermedio</option>
-              <option value="Advanced">Avanzato</option>
-            </select>
-          </div>
-        </div>
-        <div className="books-grid">
-          {filteredBooks.map((book: BookProps) => (
-            <Book
-              key={book.id}
-              style={{ cursor: "pointer" }}
-              {...book}
-              onClick={() => onBookSelect(book)}
+              }}
+              InputProps={{
+                startAdornment: <Search sx={{ mr: 1, color: 'action.active' }} />
+              }}
             />
-          ))}
-        </div>
-      </div>
-    </>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showStartedOnly}
+                  onChange={(e) => setShowStartedOnly(e.target.checked)}
+                />
+              }
+              label={
+                <Typography sx={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Mostra solo i libri iniziati
+                </Typography>
+              }
+            />
+
+            <FormControl size="small" sx={{ minWidth: 150 }}>
+              <InputLabel sx={{ fontFamily: 'Poppins, sans-serif' }}>Livello</InputLabel>
+              <Select
+                value={selectedLevel}
+                onChange={(e) => setSelectedLevel(e.target.value)}
+                label="Livello"
+                sx={{
+                  fontFamily: 'Poppins, sans-serif'
+                }}
+              >
+                <MenuItem value="All" sx={{ fontFamily: 'Poppins, sans-serif' }}>Tutti i livelli</MenuItem>
+                <MenuItem value="Beginner" sx={{ fontFamily: 'Poppins, sans-serif' }}>Principiante</MenuItem>
+                <MenuItem value="Intermediate" sx={{ fontFamily: 'Poppins, sans-serif' }}>Intermedio</MenuItem>
+                <MenuItem value="Advanced" sx={{ fontFamily: 'Poppins, sans-serif' }}>Avanzato</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Books Grid */}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'flex-start' }}>
+        {filteredBooks.map((book: BookProps) => (
+          <Book
+            key={book.id}
+            {...book}
+            onClick={() => onBookSelect(book)}
+          />
+        ))}
+      </Box>
+
+      {filteredBooks.length === 0 && (
+        <Box textAlign="center" py={8}>
+          <Typography variant="h6" color="text.secondary" sx={{ fontFamily: 'Poppins, sans-serif' }}>
+            No books found matching your criteria
+          </Typography>
+        </Box>
+      )}
+    </Box>
   );
 };
 
